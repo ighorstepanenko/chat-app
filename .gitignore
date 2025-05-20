@@ -1,0 +1,7 @@
+# Local
+.idea
+.env
+__pycache__
+
+# PDM
+.pdm-python

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test</title>
+    <style>
+        #messages {
+            margin: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            height: 300px;
+            overflow-y: auto;
+        }
+        .message {
+            margin: 5px 0;
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .controls {
+            margin: 20px;
+        }
+        input[type="number"] {
+            width: 120px;
+            padding: 5px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <input type="number" id="messageId" placeholder="ID сообщения">
+        <button onclick="markAsRead()">Отметить как прочитанное</button>
+    </div>
+    <div id="messages"></div>
+
+    <script>
+        const messages = document.getElementById('messages');
+        const ws = new WebSocket('ws://localhost:8000/ws/5?token=YOUR_TOKEN');
+
+        ws.onopen = () => {
+            console.log('Connected to WebSocket');
+            addMessage('Система', 'Подключено к WebSocket');
+        };
+
+        ws.onmessage = (event) => {
+            console.log('Received:', event.data);
+            const data = JSON.parse(event.data);
+            
+            if (data.type === 'read') {
+                addMessage('Система', `Сообщение ${data.message_id} прочитано пользователем ${data.reader_id}`);
+            } else if (data.type === 'message') {
+                addMessage(`Пользователь ${data.sender_id}`, data.text);
+            } else if (data.error) {
+                addMessage('Ошибка', data.error);
+            }
+        };
+
+        ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+            addMessage('Ошибка', 'Произошла ошибка WebSocket');
+        };
+
+        ws.onclose = (event) => {
+            console.log('Disconnected:', event.code, event.reason);
+            addMessage('Система', `Отключено: ${event.code} ${event.reason}`);
+        };
+
+        function markAsRead() {
+            const messageId = document.getElementById('messageId').value;
+            if (!messageId) {
+                addMessage('Ошибка', 'Пожалуйста, введите ID сообщения');
+                return;
+            }
+
+            ws.send(JSON.stringify({
+                type: 'read',
+                message_id: parseInt(messageId)
+            }));
+            addMessage('Система', `Отправлено уведомление о прочтении сообщения ${messageId}`);
+        }
+
+        function addMessage(sender, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+            messageDiv.innerHTML = `<strong>${sender}:</strong> ${text}`;
+            messages.appendChild(messageDiv);
+            messages.scrollTop = messages.scrollHeight;
+        }
+    </script>
+</body>
+</html> 
