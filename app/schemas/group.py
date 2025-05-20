@@ -13,7 +13,7 @@ class GroupBase(BaseModel):
     """Базовая схема группы."""
 
     name: str = Field(..., max_length=100, example="Моя группа")
-    creator_id: int = Field(..., description="ID создателя группы")
+    creator_id: int | None = Field(None, description="ID создателя группы (заполняется автоматически)")
 
 
 class GroupCreate(GroupBase):

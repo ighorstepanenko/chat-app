@@ -23,17 +23,11 @@ async def create_group(
 
     Параметры:
     - name: название группы
-    - creator_id: ID создателя группы
 
     Возвращает:
     - Созданную группу с ID и списком участников
     """
-    if group_data.creator_id != current_user:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail='Нельзя создавать группу от имени другого пользователя'
-        )
-
+    group_data.creator_id = current_user
     return await service.create_group(group_data)
 
 

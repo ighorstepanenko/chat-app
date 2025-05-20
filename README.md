@@ -105,7 +105,7 @@ curl -X POST http://localhost:8000/api/v1/groups/ \
   -H "Authorization: Bearer <your-token>" \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "My Group",
+    "name": "My Group"
   }'
 ```
 
