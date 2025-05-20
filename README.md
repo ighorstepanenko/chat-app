@@ -74,8 +74,8 @@ API документация доступна по адресу: http://localhos
 curl -X POST http://localhost:8000/api/v1/auth/register \
   -H "Content-Type: application/json" \
   -d '{
-    "username": "user1",
-    "email": "user1@example.com",
+    "username": "user6",
+    "email": "user6@example.com",
     "password": "password123"
   }'
 ```
@@ -95,18 +95,17 @@ curl -X POST http://localhost:8000/api/v1/chats/ \
   -H "Authorization: Bearer <your-token>" \
   -H "Content-Type: application/json" \
   -d '{
-    "user_id": 2
+    "user_id": 3
   }'
 ```
 
 #### Создание группового чата
 ```bash
-curl -X POST http://localhost:8000/api/v1/groups/create \
+curl -X POST http://localhost:8000/api/v1/groups/ \
   -H "Authorization: Bearer <your-token>" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "My Group",
-    "members": [2, 3, 4]
   }'
 ```
 

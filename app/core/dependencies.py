@@ -23,7 +23,7 @@ async def get_user_service(db: AsyncSession = Depends(get_db)) -> UserService:
 
 async def get_chat_service(db: AsyncSession = Depends(get_db)) -> ChatService:
     """Зависимость для получения сервиса чатов."""
-    return ChatService(ChatRepository(db), GroupRepository(db))
+    return ChatService(ChatRepository(db))
 
 
 async def get_group_service(db: AsyncSession = Depends(get_db)) -> GroupService:

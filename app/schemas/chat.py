@@ -20,6 +20,7 @@ class ChatCreate(ChatBase):
     """Схема для создания чата."""
 
     user_id: int = Field(..., description="ID пользователя для личного чата")
+    current_user_id: int | None = Field(None, description="ID текущего пользователя (заполняется автоматически)")
 
 
 class ChatRead(ChatBase, BaseSchema):

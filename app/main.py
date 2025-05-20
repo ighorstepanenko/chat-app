@@ -34,7 +34,7 @@ def create_app() -> FastAPI:
 def setup_routers(app: FastAPI) -> None:
     """Установка маршрутизации приложения."""
     app.include_router(auth_router, prefix='/api/v1')
-    app.include_router(chats_router, prefix='/api/v1', dependencies=[Depends(get_current_user)])
+    app.include_router(chats_router, prefix='/api/v1')
     app.include_router(groups_router, prefix='/api/v1')
     app.include_router(messages_router, prefix='/api/v1')
     app.include_router(websocket_router)

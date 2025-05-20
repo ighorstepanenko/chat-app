@@ -5,7 +5,7 @@
 Поддерживает как личные, так и групповые чаты.
 """
 
-from sqlalchemy import and_, select
+from sqlalchemy import alias, and_, select
 from sqlalchemy.dialects.postgresql import JSONB
 
 from app.db.models import Chat, Group, UserChat
@@ -122,3 +122,34 @@ class ChatRepository(BaseRepository[Chat]):
         if user_chat:
             await self.session.delete(user_chat)
             await self.session.commit()
+
+    async def check_chat_exists(self, user1_id: int, user2_id: int) -> bool:
+        """
+        Проверяет существование личного чата между двумя пользователями.
+
+        Args:
+            user1_id: ID первого пользователя
+            user2_id: ID второго пользователя
+
+        Returns:
+            bool: True если чат существует, False если нет
+
+        """
+        uc1 = alias(UserChat, name='uc1')
+        uc2 = alias(UserChat, name='uc2')
+
+        subquery = (
+            select(Chat.id)
+            .join(uc1, Chat.id == uc1.c.chat_id)
+            .join(uc2, Chat.id == uc2.c.chat_id)
+            .where(
+                and_(
+                    Chat.is_group.is_(False),
+                    uc1.c.user_id == user1_id,
+                    uc2.c.user_id == user2_id
+                )
+            )
+        ).exists()
+
+        result = await self.session.execute(select(subquery))
+        return result.scalar()
