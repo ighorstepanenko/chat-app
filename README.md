@@ -52,6 +52,14 @@ docker compose exec backend python scripts/create_test_data.py
 
 API документация доступна по адресу: http://localhost:8000/docs
 
+### Запуск тестов
+
+Для запуска тестов используйте следующую команду:
+
+```bash
+docker compose exec backend pytest -v -p no:warnings -x
+```
+
 ## Тестовые данные
 
 После запуска скрипта `create_test_data.py` будут созданы:
