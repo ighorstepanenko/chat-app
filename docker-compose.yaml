@@ -12,6 +12,7 @@ services:
       - ./scripts:/srv/project/scripts
       - ./alembic.ini:/srv/project/alembic.ini
       - ./migrations:/srv/project/migrations
+      - ./tests:/srv/project/tests
     env_file:
       - .env
     depends_on:
