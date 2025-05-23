@@ -53,7 +53,7 @@ async def get_current_user(
     """
     try:
         payload = jwt.decode(token, settings.auth.secret_key, algorithms=[settings.auth.token_algorythm])
-        user_id: int = int(payload.get('user_id'))
+        user_id: int = int(payload.get('user_id')) if payload.get('user_id') is not None else None
         if user_id is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

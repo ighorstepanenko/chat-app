@@ -3,9 +3,9 @@ import asyncio
 import sys
 from pathlib import Path
 
-from app.core.security import get_password_hash
 from app.db.models import Chat, Group, Message, User, UserChat
 from app.db.session import write_session
+from app.services.auth import get_password_hash
 
 project_root = str(Path(__file__).parent.parent)
 sys.path.append(project_root)
